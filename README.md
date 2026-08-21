@@ -64,9 +64,3 @@ graph TD
     App1 -->|2. Query DB on Cache Miss / Save New| DB[(PostgreSQL Database)]
     App2 -->|2. Query DB on Cache Miss / Save New| DB
 ```
-
----
-
-## 🔧 Hướng Dẫn Chạy Dự Án
-
-_(Phần này sẽ được cập nhật chi tiết sau khi hoàn thiện mã nguồn cấu hình Docker Compose và mã nguồn Java Spring Boot)_
