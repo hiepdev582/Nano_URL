@@ -1,8 +1,8 @@
 spring:
   application:
-    name: url-shortener
+    name: nano-url
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/url_shortener_db}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5433/nano_url_db}
     username: ${SPRING_DATASOURCE_USERNAME:postgres_user}
     password: ${SPRING_DATASOURCE_PASSWORD:postgres_password}
     driver-class-name: org.postgresql.Driver
@@ -10,6 +10,10 @@ spring:
     redis:
       host: ${SPRING_DATA_REDIS_HOST:localhost}
       port: ${SPRING_DATA_REDIS_PORT:6379}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
 
 server:
   port: ${SERVER_PORT:8080}

@@ -6,14 +6,14 @@ services:
   # ----------------------------------------------------
   postgres:
     image: postgres:16-alpine
-    container_name: url_shortener_postgres
+    container_name: nano_url_postgres
     restart: always
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
@@ -24,7 +24,7 @@ services:
   # ----------------------------------------------------
   redis:
     image: redis:7-alpine
-    container_name: url_shortener_redis
+    container_name: nano_url_redis
     restart: always
     ports:
       - "6379:6379"
@@ -40,7 +40,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: url_shortener_backend_1
+    container_name: nano_url_backend_1
     restart: always
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/${POSTGRES_DB}
@@ -62,7 +62,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: url_shortener_backend_2
+    container_name: nano_url_backend_2
     restart: always
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/${POSTGRES_DB}
@@ -84,7 +84,19 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: url_shortener_frontend
+    container_name: nano_url_frontend
+    develop:
+      watch:
+        # Nếu thay đổi package.json, tự động build lại image frontend
+        - path: ./frontend/package.json
+          action: rebuild
+        # Nếu thay đổi code, đồng bộ ngay lập tức vào container mà không cần build lại
+        - path: ./frontend
+          target: /app
+          action: sync
+          ignore:
+            - node_modules/
+            - .nuxt/
     restart: always
     environment:
       - PORT=3000
@@ -100,7 +112,7 @@ services:
   # ----------------------------------------------------
   nginx:
     image: nginx:alpine
-    container_name: url_shortener_nginx
+    container_name: nano_url_nginx
     restart: always
     ports:
       - "80:80"

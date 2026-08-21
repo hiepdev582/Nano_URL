@@ -1,4 +1,4 @@
-# Hệ thống Rút gọn Link (URL Shortener - Clone TinyURL)
+# Hệ thống Rút gọn Link (Nano URL - Clone TinyURL)
 
 Dự án này triển khai một hệ thống rút gọn URL (TinyURL clone) hiệu năng cao, tập trung vào việc áp dụng các kiến thức nền tảng về thiết kế hệ thống (System Design), cơ sở dữ liệu, caching, và cân bằng tải (load balancing).
 
