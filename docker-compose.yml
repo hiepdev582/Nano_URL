@@ -78,7 +78,7 @@ services:
       - app-network
 
   # ----------------------------------------------------
-  # 5. FRONTEND (React / Vue)
+  # 5. FRONTEND (Nuxt 3)
   # ----------------------------------------------------
   frontend:
     build:
@@ -86,6 +86,11 @@ services:
       dockerfile: Dockerfile
     container_name: url_shortener_frontend
     restart: always
+    environment:
+      - PORT=3000
+      - HOST=0.0.0.0
+    expose:
+      - "3000"
     networks:
       - app-network
 
