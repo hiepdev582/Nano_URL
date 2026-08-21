@@ -1,5 +1,5 @@
 {
-  "name": "url-shortener-frontend",
+  "name": "nano-url-frontend",
   "type": "module",
   "private": true,
   "scripts": {

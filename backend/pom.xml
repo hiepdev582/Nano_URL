@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.hiepnn</groupId>
-	<artifactId>url-shortener</artifactId>
+	<artifactId>nano-url</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name/>
 	<description/>
@@ -27,7 +27,7 @@
 		<url/>
 	</scm>
 	<properties>
-		<java.version>26</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
