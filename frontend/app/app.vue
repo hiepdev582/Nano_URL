@@ -323,13 +323,6 @@ onMounted(() => {
   background: rgba(15, 23, 42, 0.75);
 }
 
-.input-prefix {
-  padding-left: 1rem;
-  padding-right: 0.5rem;
-  display: flex;
-  align-items: center;
-}
-
 .link-icon {
   font-size: 1.25rem;
   opacity: 0.7;
@@ -345,6 +338,7 @@ onMounted(() => {
   outline: none;
   font-family: inherit;
   min-width: 0;
+  text-overflow: ellipsis;
 }
 
 .btn-submit {
@@ -580,7 +574,7 @@ onMounted(() => {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 320px;
+  max-width: 100%;
 }
 
 .history-date {
