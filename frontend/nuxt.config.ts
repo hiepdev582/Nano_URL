@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
+  css: ["~/assets/css/index.css"],
 
   runtimeConfig: {
     apiServerUrl: process.env.NUXT_API_SERVER_URL || "http://nginx:80",
