@@ -89,6 +89,7 @@ services:
     environment:
       - PORT=3000
       - HOST=0.0.0.0
+      - NUXT_API_SERVER_URL=http://nginx:80
     expose:
       - "3000"
     networks:
