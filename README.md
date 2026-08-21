@@ -39,6 +39,7 @@ Thiết kế RESTful API chuẩn hóa để xử lý các yêu cầu từ phía 
 
 ## 🛠️ Công Nghệ Sử Dụng (Techstack)
 
+- **Language & Frontend:** Typescript, Nuxt
 - **Language & Backend:** Java (Spring Boot)
 - **Database (Relational):** PostgreSQL
 - **Cache:** Redis

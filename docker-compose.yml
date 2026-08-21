@@ -1,0 +1,125 @@
+version: "3.8"
+
+services:
+  # ----------------------------------------------------
+  # 1. DATABASE: PostgreSQL
+  # ----------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: url_shortener_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  # ----------------------------------------------------
+  # 2. CACHE: Redis
+  # ----------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: url_shortener_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - app-network
+
+  # ----------------------------------------------------
+  # 3. BACKEND INSTANCE 1 (Spring Boot)
+  # ----------------------------------------------------
+  backend1:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: url_shortener_backend_1
+    restart: always
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/${POSTGRES_DB}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_DATA_REDIS_PORT=6379
+      - SERVER_PORT=8080
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - app-network
+
+  # ----------------------------------------------------
+  # 4. BACKEND INSTANCE 2 (Scale Horizontally)
+  # ----------------------------------------------------
+  backend2:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: url_shortener_backend_2
+    restart: always
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/${POSTGRES_DB}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_DATA_REDIS_PORT=6379
+      - SERVER_PORT=8080
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - app-network
+
+  # ----------------------------------------------------
+  # 5. FRONTEND (Nuxt 3)
+  # ----------------------------------------------------
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: url_shortener_frontend
+    restart: always
+    environment:
+      - PORT=3000
+      - HOST=0.0.0.0
+      - NUXT_API_SERVER_URL=http://nginx:80
+    expose:
+      - "3000"
+    networks:
+      - app-network
+
+  # ----------------------------------------------------
+  # 6. REVERSE PROXY / LOAD BALANCER: Nginx
+  # ----------------------------------------------------
+  nginx:
+    image: nginx:alpine
+    container_name: url_shortener_nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - backend1
+      - backend2
+      - frontend
+    networks:
+      - app-network
+
+# ----------------------------------------------------
+# VOLUMES & NETWORKS DEFINITION
+# ----------------------------------------------------
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  app-network:
+    driver: bridge
